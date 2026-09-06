@@ -1,0 +1,103 @@
+{
+  "common": {
+    "close": "Закрыть",
+    "back": "Назад",
+    "done": "Готово"
+  },
+  "tabs": {
+    "home": "Обзор",
+    "feed": "Лента",
+    "settings": "Настройки"
+  },
+  "transactionType": {
+    "expense": "Расход",
+    "income": "Доход",
+    "transfer": "Перевод"
+  },
+  "addTransaction": {
+    "categoriesMore": "Ещё",
+    "categoriesTitle": "Категория",
+    "notePlaceholder": "Добавить заметку",
+    "noteDone": "Готово",
+    "account": "Счёт"
+  },
+  "transactionDetail": {
+    "save": "Сохранить",
+    "delete": "Удалить"
+  },
+  "transfer": {
+    "from": "Откуда",
+    "to": "Куда",
+    "sent": "Списано",
+    "received": "Зачислено",
+    "rate": "Курс",
+    "date": "Дата"
+  },
+  "home": {
+    "balance": "Баланс",
+    "monthSpent": "Расход за месяц",
+    "monthIncome": "Доход за месяц",
+    "categoryChartTitle": "Расходы по категориям",
+    "categoryChartTotal": "Всего",
+    "categoryChartMore": "Ещё",
+    "categoryChartCollapse": "Свернуть",
+    "recentTitle": "Последние операции",
+    "recentAll": "Все",
+    "netThisMonth": "За месяц",
+    "empty": "Нет счетов"
+  },
+  "feed": {
+    "today": "Сегодня",
+    "yesterday": "Вчера",
+    "empty": "Пока нет операций",
+    "filtersTitle": "Фильтры",
+    "resetFilters": "Сбросить",
+    "filterAll": "Все",
+    "filterType": "Тип",
+    "filterCategory": "Категория",
+    "filterAccount": "Счёт",
+    "filterPeriod": "Период",
+    "periodAll": "Всё время",
+    "periodToday": "Сегодня",
+    "periodWeek": "7 дней",
+    "periodMonth": "Этот месяц",
+    "periodQuarter": "3 месяца",
+    "periodYear": "Этот год"
+  },
+  "settings": {
+    "accounts": "Счета",
+    "categories": "Категории",
+    "theme": {
+      "label": "Тема",
+      "system": "Авто",
+      "light": "Светлая",
+      "dark": "Тёмная"
+    },
+    "language": {
+      "label": "Язык"
+    }
+  },
+  "categories": {
+    "editTitle": "Категория",
+    "newTitle": "Новая категория",
+    "namePlaceholder": "Название",
+    "icon": "Иконка",
+    "color": "Цвет",
+    "save": "Сохранить",
+    "archive": "Архивировать"
+  },
+  "accounts": {
+    "editTitle": "Счёт",
+    "newTitle": "Новый счёт",
+    "namePlaceholder": "Название",
+    "initialBalance": "Начальный баланс",
+    "color": "Цвет",
+    "save": "Сохранить",
+    "archive": "Архивировать",
+    "type": {
+      "cash": "Наличные",
+      "card": "Карта",
+      "savings": "Накопления"
+    }
+  }
+}

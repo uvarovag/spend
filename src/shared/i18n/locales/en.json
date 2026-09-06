@@ -1,0 +1,103 @@
+{
+  "common": {
+    "close": "Close",
+    "back": "Back",
+    "done": "Done"
+  },
+  "tabs": {
+    "home": "Overview",
+    "feed": "Feed",
+    "settings": "Settings"
+  },
+  "transactionType": {
+    "expense": "Expense",
+    "income": "Income",
+    "transfer": "Transfer"
+  },
+  "addTransaction": {
+    "categoriesMore": "More",
+    "categoriesTitle": "Category",
+    "notePlaceholder": "Add a note",
+    "noteDone": "Done",
+    "account": "Account"
+  },
+  "transactionDetail": {
+    "save": "Save",
+    "delete": "Delete"
+  },
+  "transfer": {
+    "from": "From",
+    "to": "To",
+    "sent": "Sent",
+    "received": "Received",
+    "rate": "Rate",
+    "date": "Date"
+  },
+  "home": {
+    "balance": "Balance",
+    "monthSpent": "Spent this month",
+    "monthIncome": "Income this month",
+    "categoryChartTitle": "Spending by category",
+    "categoryChartTotal": "Total",
+    "categoryChartMore": "More",
+    "categoryChartCollapse": "Collapse",
+    "recentTitle": "Recent activity",
+    "recentAll": "All",
+    "netThisMonth": "This month",
+    "empty": "No accounts yet"
+  },
+  "feed": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "empty": "No transactions yet",
+    "filtersTitle": "Filters",
+    "resetFilters": "Reset",
+    "filterAll": "All",
+    "filterType": "Type",
+    "filterCategory": "Category",
+    "filterAccount": "Account",
+    "filterPeriod": "Period",
+    "periodAll": "All time",
+    "periodToday": "Today",
+    "periodWeek": "7 days",
+    "periodMonth": "This month",
+    "periodQuarter": "3 months",
+    "periodYear": "This year"
+  },
+  "settings": {
+    "accounts": "Accounts",
+    "categories": "Categories",
+    "theme": {
+      "label": "Theme",
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "language": {
+      "label": "Language"
+    }
+  },
+  "categories": {
+    "editTitle": "Category",
+    "newTitle": "New category",
+    "namePlaceholder": "Name",
+    "icon": "Icon",
+    "color": "Color",
+    "save": "Save",
+    "archive": "Archive"
+  },
+  "accounts": {
+    "editTitle": "Account",
+    "newTitle": "New account",
+    "namePlaceholder": "Name",
+    "initialBalance": "Initial balance",
+    "color": "Color",
+    "save": "Save",
+    "archive": "Archive",
+    "type": {
+      "cash": "Cash",
+      "card": "Card",
+      "savings": "Savings"
+    }
+  }
+}

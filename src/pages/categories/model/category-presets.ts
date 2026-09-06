@@ -1,0 +1,18 @@
+export const categoryIconPresets = [
+  'fast-food-outline',
+  'car-outline',
+  'bag-outline',
+  'home-outline',
+  'game-controller-outline',
+  'medkit-outline',
+  'wifi-outline',
+  'cash-outline',
+  'gift-outline',
+  'trending-up-outline',
+  'book-outline',
+  'airplane-outline',
+  'paw-outline',
+  'school-outline',
+  'fitness-outline',
+  'ellipsis-horizontal-outline',
+];

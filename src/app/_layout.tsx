@@ -1,18 +1,28 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import '@/shared/i18n/i18n';
+import '@/global.css';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-SplashScreen.preventAutoHideAsync();
+import { useColorScheme } from '@/shared/lib/use-color-scheme';
 
-export default function TabLayout() {
+export default function RootLayout() {
   const colorScheme = useColorScheme();
+
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="add-transaction" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="transaction-detail" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="pick-category" />
+          <Stack.Screen name="pick-account" />
+          <Stack.Screen name="account-form" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="category-form" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="feed-filters" options={{ presentation: 'modal' }} />
+        </Stack>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }

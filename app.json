@@ -1,23 +1,19 @@
 {
   "expo": {
-    "name": "test-app",
-    "slug": "test-app",
+    "name": "Spend",
+    "slug": "spend",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "testapp",
+    "scheme": "spend",
     "userInterfaceStyle": "automatic",
-    "ios": {
-      "icon": "./assets/expo.icon"
+    "locales": {
+      "en": "./ios-locales/en.json",
+      "ru": "./ios-locales/ru.json"
     },
-    "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
-      },
-      "predictiveBackGestureEnabled": false
+    "ios": {
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "com.uvarovag.spend"
     },
     "web": {
       "output": "static",
@@ -32,7 +28,8 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true,
