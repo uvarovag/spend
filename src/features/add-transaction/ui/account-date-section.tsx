@@ -4,7 +4,7 @@ import { View } from 'react-native';
 
 import { AccountCard, type Account } from '@/entities/account';
 import { useAccountBalance } from '@/entities/transaction';
-import { CompactDatePicker } from '@/shared/ui/compact-date-picker';
+import { DateCard } from '@/shared/ui/date-card';
 
 interface AccountDateSectionProps {
   accounts: Account[];
@@ -42,7 +42,7 @@ export function AccountDateSection({ accounts, accountId, date, onDateChange, lo
         locale={locale}
         onPress={openAccountPicker}
       />
-      <CompactDatePicker date={date} onDateChange={onDateChange} />
+      <DateCard date={date} onDateChange={onDateChange} locale={locale} />
     </View>
   );
 }

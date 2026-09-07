@@ -2,7 +2,10 @@
   "common": {
     "close": "Close",
     "back": "Back",
-    "done": "Done"
+    "done": "Done",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "date": "Date"
   },
   "errors": {
     "saveFailed": "Couldn't save your changes to this device"
@@ -33,8 +36,7 @@
     "to": "To",
     "sent": "Sent",
     "received": "Received",
-    "rate": "Rate",
-    "date": "Date"
+    "rate": "Rate"
   },
   "home": {
     "balance": "Balance",

@@ -7,7 +7,7 @@ import { AccountCard, clearPickedAccount, usePickedAccount } from '@/entities/ac
 import { useAccountBalance } from '@/entities/transaction';
 import { currencySymbol, formatNumber } from '@/shared/lib/format-currency';
 import { systemColors } from '@/shared/lib/system-colors';
-import { CompactDatePicker } from '@/shared/ui/compact-date-picker';
+import { DateCard } from '@/shared/ui/date-card';
 import { GlassIconButton } from '@/shared/ui/glass-icon-button';
 
 import type { TransferFormState } from '../model/use-transfer-form';
@@ -120,10 +120,7 @@ export function TransferForm({ form }: TransferFormProps) {
 
       {rateLabel && <Text className="text-xs text-neutral-400 dark:text-neutral-500">{rateLabel}</Text>}
 
-      <View className="gap-2">
-        <Text className="text-sm text-neutral-500 dark:text-neutral-400">{t('transfer.date')}</Text>
-        <CompactDatePicker date={form.date} onDateChange={form.setDate} />
-      </View>
+      <DateCard date={form.date} onDateChange={form.setDate} locale={i18n.language} />
     </View>
   );
 }

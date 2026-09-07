@@ -92,6 +92,7 @@ export default function RootLayout() {
             <Stack.Screen name="transaction-detail" options={{ presentation: 'modal' }} />
             <Stack.Screen name="pick-category" />
             <Stack.Screen name="pick-account" />
+            <Stack.Screen name="pick-date" />
             <Stack.Screen name="account-form" options={{ presentation: 'modal' }} />
             <Stack.Screen name="category-form" options={{ presentation: 'modal' }} />
             <Stack.Screen name="feed-filters" options={{ presentation: 'modal' }} />
