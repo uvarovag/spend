@@ -105,24 +105,26 @@ function DraggableRow({ category, initialIndex, order, itemsCount, onPress, onRe
   }));
 
   return (
-    <GestureDetector gesture={panGesture}>
-      <Animated.View
-        style={animatedStyle}
-        className="flex-row items-center gap-3 border-b border-neutral-100 bg-white px-4 dark:border-neutral-900 dark:bg-black"
+    <Animated.View
+      style={animatedStyle}
+      className="flex-row items-center gap-3 border-b border-neutral-100 bg-white px-4 dark:border-neutral-900 dark:bg-black"
+    >
+      <View
+        className="h-10 w-10 items-center justify-center rounded-full"
+        style={{ backgroundColor: category.color }}
       >
-        <View
-          className="h-10 w-10 items-center justify-center rounded-full"
-          style={{ backgroundColor: category.color }}
-        >
-          <Ionicons name={category.icon as never} size={18} color={systemColors.white} />
+        <Ionicons name={category.icon as never} size={18} color={systemColors.white} />
+      </View>
+      <Pressable onPress={onPress} className="flex-1 py-2">
+        <Text className="text-base text-neutral-900 dark:text-neutral-50" numberOfLines={1}>
+          {category.name}
+        </Text>
+      </Pressable>
+      <GestureDetector gesture={panGesture}>
+        <View className="h-11 w-11 items-center justify-center">
+          <Ionicons name="reorder-three-outline" size={22} color={systemColors.gray} />
         </View>
-        <Pressable onPress={onPress} className="flex-1 py-2">
-          <Text className="text-base text-neutral-900 dark:text-neutral-50" numberOfLines={1}>
-            {category.name}
-          </Text>
-        </Pressable>
-        <Ionicons name="reorder-three-outline" size={22} color={systemColors.gray} />
-      </Animated.View>
-    </GestureDetector>
+      </GestureDetector>
+    </Animated.View>
   );
 }

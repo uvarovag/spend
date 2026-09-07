@@ -30,7 +30,9 @@
   },
   "transactionDetail": {
     "save": "Сохранить",
-    "delete": "Удалить"
+    "delete": "Удалить",
+    "deleteConfirmTitle": "Удалить операцию?",
+    "deleteConfirmMessage": "Это действие необратимо."
   },
   "transfer": {
     "from": "Откуда",
@@ -94,7 +96,9 @@
     "icon": "Иконка",
     "color": "Цвет",
     "save": "Сохранить",
-    "archive": "Архивировать"
+    "archive": "Архивировать",
+    "archiveConfirmTitle": "Архивировать категорию?",
+    "archiveConfirmMessage": "Она исчезнет из всех списков. Это действие необратимо."
   },
   "accounts": {
     "editTitle": "Счёт",

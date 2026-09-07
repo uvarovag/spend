@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef } from 'react';
-import { KeyboardAvoidingView, Pressable, ScrollView, Text, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Pressable, ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -158,8 +158,17 @@ export function TransactionDetailScreen() {
   const currentTransaction = transaction;
 
   function handleDelete() {
-    void deleteTransaction(currentTransaction.id);
-    router.back();
+    Alert.alert(t('transactionDetail.deleteConfirmTitle'), t('transactionDetail.deleteConfirmMessage'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('transactionDetail.delete'),
+        style: 'destructive',
+        onPress: () => {
+          void deleteTransaction(currentTransaction.id);
+          router.back();
+        },
+      },
+    ]);
   }
 
   return (

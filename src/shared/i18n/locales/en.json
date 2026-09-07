@@ -30,7 +30,9 @@
   },
   "transactionDetail": {
     "save": "Save",
-    "delete": "Delete"
+    "delete": "Delete",
+    "deleteConfirmTitle": "Delete transaction?",
+    "deleteConfirmMessage": "This can't be undone."
   },
   "transfer": {
     "from": "From",
@@ -94,7 +96,9 @@
     "icon": "Icon",
     "color": "Color",
     "save": "Save",
-    "archive": "Archive"
+    "archive": "Archive",
+    "archiveConfirmTitle": "Archive category?",
+    "archiveConfirmMessage": "It will disappear from every list. This can't be undone."
   },
   "accounts": {
     "editTitle": "Account",

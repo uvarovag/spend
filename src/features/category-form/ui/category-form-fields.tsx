@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
-import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { archiveCategory, createCategory, updateCategory, type Category, type CategoryKind } from '@/entities/category';
@@ -50,10 +50,20 @@ export function CategoryFormFields({ existingCategory, kind, onSaved, onArchived
   }
 
   function handleArchive() {
-    if (existingCategory) {
-      void archiveCategory(existingCategory.id);
-      onArchived?.();
+    if (!existingCategory) {
+      return;
     }
+    Alert.alert(t('categories.archiveConfirmTitle'), t('categories.archiveConfirmMessage'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('categories.archive'),
+        style: 'destructive',
+        onPress: () => {
+          void archiveCategory(existingCategory.id);
+          onArchived?.();
+        },
+      },
+    ]);
   }
 
   return (
