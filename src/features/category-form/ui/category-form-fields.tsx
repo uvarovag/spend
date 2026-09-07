@@ -9,7 +9,7 @@ import { systemColors } from '@/shared/lib/system-colors';
 import { ColorSwatchPicker } from '@/shared/ui/color-swatch-picker';
 import { GlassButton } from '@/shared/ui/glass-button';
 
-import { categoryIconPresets } from '../model/category-presets';
+import { expenseCategoryIconPresets, incomeCategoryIconPresets } from '../model/category-presets';
 
 interface CategoryFormFieldsProps {
   existingCategory?: Category;
@@ -25,9 +25,10 @@ interface CategoryFormFieldsProps {
 // `features/account-form/ui/account-form-fields.tsx` for the same pattern and its rationale.
 export function CategoryFormFields({ existingCategory, kind, onSaved, onArchived }: CategoryFormFieldsProps) {
   const { t } = useTranslation();
+  const iconPresets = kind === 'expense' ? expenseCategoryIconPresets : incomeCategoryIconPresets;
   const [name, setName] = useState(existingCategory?.name ?? '');
   const [nameError, setNameError] = useState<string | null>(null);
-  const [icon, setIcon] = useState(existingCategory?.icon ?? categoryIconPresets[0]);
+  const [icon, setIcon] = useState(existingCategory?.icon ?? iconPresets[0]);
   const [color, setColor] = useState(existingCategory?.color ?? colorPresets[0]);
 
   function handleChangeName(text: string) {
@@ -75,7 +76,7 @@ export function CategoryFormFields({ existingCategory, kind, onSaved, onArchived
         <View className="gap-2">
           <Text className="text-sm text-neutral-500 dark:text-neutral-400">{t('categories.icon')}</Text>
           <View className="flex-row flex-wrap gap-3">
-            {categoryIconPresets.map((iconOption) => (
+            {iconPresets.map((iconOption) => (
               <Pressable
                 key={iconOption}
                 onPress={() => setIcon(iconOption)}

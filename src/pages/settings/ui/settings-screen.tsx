@@ -1,4 +1,5 @@
 import { FieldGroup, Host, ListItem } from '@expo/ui';
+import { listSectionSpacing } from '@expo/ui/swift-ui/modifiers';
 import { router, Stack } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -18,7 +19,7 @@ export function SettingsScreen() {
     <SafeAreaView edges={[]} className="flex-1">
       <Stack.Screen options={{ headerShown: true, headerLargeTitle: true, title: t('tabs.settings') }} />
       <Host style={{ flex: 1 }} useViewportSizeMeasurement>
-        <FieldGroup>
+        <FieldGroup modifiers={[listSectionSpacing('compact')]}>
           <FieldGroup.Section>
             <ListItem
               leading={<IconBadge name="wallet-outline" backgroundColor={systemColors.green} />}

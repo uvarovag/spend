@@ -1,18 +1,32 @@
-export const categoryIconPresets = [
+export const expenseCategoryIconPresets = [
   'fast-food-outline',
+  'cart-outline',
   'car-outline',
   'bag-outline',
   'home-outline',
+  'flash-outline',
   'game-controller-outline',
   'medkit-outline',
   'wifi-outline',
-  'cash-outline',
   'gift-outline',
-  'trending-up-outline',
   'book-outline',
   'airplane-outline',
   'paw-outline',
   'school-outline',
   'fitness-outline',
+  'ellipsis-horizontal-outline',
+];
+
+export const incomeCategoryIconPresets = [
+  'cash-outline',
+  'wallet-outline',
+  'trending-up-outline',
+  'briefcase-outline',
+  'card-outline',
+  'business-outline',
+  'laptop-outline',
+  'gift-outline',
+  'home-outline',
+  'ribbon-outline',
   'ellipsis-horizontal-outline',
 ];

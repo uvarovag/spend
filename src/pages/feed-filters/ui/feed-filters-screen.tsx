@@ -1,5 +1,5 @@
 import { FieldGroup, Host, ListItem, Picker } from '@expo/ui';
-import { background, scrollContentBackground } from '@expo/ui/swift-ui/modifiers';
+import { background, listSectionSpacing, scrollContentBackground } from '@expo/ui/swift-ui/modifiers';
 import { router } from 'expo-router';
 import type { ReactNode } from 'react';
 import { Pressable, Text, View } from 'react-native';
@@ -34,7 +34,11 @@ const periodLabelKeys: Record<FeedPeriod, string> = {
 const allOptionValue = 'all';
 
 function TrailingPickerHost({ children }: { children: ReactNode }) {
-  return <Host style={{ height: 32, width: 150 }}>{children}</Host>;
+  return (
+    <Host matchContents={{ horizontal: true }} style={{ height: 32 }}>
+      {children}
+    </Host>
+  );
 }
 
 interface FilterOption<T extends string> {
@@ -86,7 +90,11 @@ export function FeedFiltersScreen() {
   const categories = [...expenseCategories, ...incomeCategories];
   const colorScheme = useColorScheme();
   const backgroundColor = colorScheme === 'dark' ? groupedBackgroundColor.dark : groupedBackgroundColor.light;
-  const fieldGroupModifiers = [scrollContentBackground('hidden' as const), background(backgroundColor)];
+  const fieldGroupModifiers = [
+    scrollContentBackground('hidden' as const),
+    background(backgroundColor),
+    listSectionSpacing('compact'),
+  ];
 
   return (
     <SafeAreaView edges={['top', 'bottom']} className="flex-1 bg-[#F2F2F7] dark:bg-black">
