@@ -32,8 +32,12 @@ export function CategoryManageScreen() {
           ),
         }}
       />
-      <ScrollView contentContainerClassName="pb-24" contentInsetAdjustmentBehavior="automatic">
-        <View className="px-4 pb-2 pt-2">
+      <ScrollView
+        contentContainerClassName="pb-24"
+        contentInsetAdjustmentBehavior="automatic"
+        stickyHeaderIndices={[0]}
+      >
+        <View className="bg-white px-4 pb-2 pt-2 dark:bg-black">
           <SegmentedSwitcher value={kind} onChange={setKind} options={kinds} getLabel={(k) => t(`transactionType.${k}`)} />
         </View>
         <DraggableCategoryList
