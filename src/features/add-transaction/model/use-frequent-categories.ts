@@ -1,7 +1,7 @@
 import { useCategories, type Category, type CategoryKind } from '@/entities/category';
 import { useTransactions } from '@/entities/transaction';
 
-export const frequentCategoriesLimit = 8;
+export const frequentCategoriesLimit = 10;
 const frequencyWindowInDays = 30;
 
 export function useFrequentCategories(kind: CategoryKind): Category[] {

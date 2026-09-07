@@ -27,10 +27,10 @@ function category(id: string, order: number): Category {
   return { id, name: id, icon: 'cash-outline', color: '#000', kind: 'expense', order, archivedAt: null };
 }
 
-function expenseTransaction(id: string, categoryId: string, note: string) {
+function expenseTransaction(id: string, categoryId: string, note: string, date = new Date().toISOString()) {
   return {
     id,
-    date: new Date().toISOString(),
+    date,
     note,
     type: 'expense',
     accountId: 'a1',
@@ -115,6 +115,33 @@ describe('useNoteRelevantCategories', () => {
 
     expect(result.current.categories.map((c) => c.id)).toEqual(['coffee']);
     expect(result.current.autoSelectCategoryId).toBe('coffee');
+  });
+
+  it('caps the scan to the most recent transactions, ignoring older ones', async () => {
+    function daysAgo(days: number): string {
+      const date = new Date();
+      date.setDate(date.getDate() - days);
+      return date.toISOString();
+    }
+
+    const fakeDatabase: FakeDatabase = createFakeDatabase();
+    (getDatabase as jest.Mock).mockReturnValue(fakeDatabase);
+
+    mockSelect(fakeDatabase, [category('old', 0)]);
+    await hydrateCategories();
+
+    // 500 recent, note-less fillers occupy every slot within the cap...
+    const fillers = Array.from({ length: 500 }, (_, index) => expenseTransaction(`filler-${index}`, 'old', '', daysAgo(index)));
+    // ...pushing this one real match to the 501st-most-recent position, past the cap.
+    const tooOld = expenseTransaction('too-old', 'old', 'кофе', daysAgo(10000));
+    mockSelect(fakeDatabase, [...fillers, tooOld]);
+    await hydrateTransactions();
+
+    const { result } = await renderHook(() => useNoteRelevantCategories('expense', 'кофе'), {
+      wrapper: ({ children }) => <Provider store={store}>{children}</Provider>,
+    });
+
+    expect(result.current.categories).toEqual([]);
   });
 
   it('does not auto-select when the top two categories are tied', async () => {

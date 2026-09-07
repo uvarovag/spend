@@ -16,6 +16,11 @@ const exactWordMatchMultiplier = 2;
 // Only auto-pick a category when it's not a close call — otherwise just reorder the list and
 // let the user tap, per the "smart default, never the only option" rule (ux-guidelines.md, I).
 const autoSelectMinScoreRatio = 2;
+// Scoring against the full transaction history has no upper bound on a years-old, heavily-used
+// ledger — cap the scan to the most recent transactions (useTransactions() is already sorted
+// newest-first) rather than a day-window, since an exact note match doesn't go stale with time
+// the way usage frequency does (see ux-guidelines.md, I).
+const noteMatchHistoryLimit = 500;
 
 export function tokenizeNote(note: string): string[] {
   const words = note.toLowerCase().match(/\p{L}+/gu) ?? [];
@@ -71,7 +76,7 @@ export function useNoteRelevantCategories(kind: CategoryKind, note: string): Not
   }
 
   const scoreByCategoryId = new Map<string, number>();
-  for (const transaction of transactions) {
+  for (const transaction of transactions.slice(0, noteMatchHistoryLimit)) {
     if (transaction.type !== kind || !transaction.note) {
       continue;
     }
