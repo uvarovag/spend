@@ -3,6 +3,7 @@
     "close": "Close",
     "back": "Back",
     "done": "Done",
+    "cancel": "Cancel",
     "today": "Today",
     "yesterday": "Yesterday",
     "date": "Date"
@@ -104,6 +105,9 @@
     "color": "Color",
     "save": "Save",
     "archive": "Archive",
+    "archiveBlockedByBalance": "Can't archive while the account still has a balance",
+    "archiveConfirmTitle": "Archive account?",
+    "archiveConfirmMessage": "It will disappear from every list. This can't be undone.",
     "type": {
       "cash": "Cash",
       "card": "Card",

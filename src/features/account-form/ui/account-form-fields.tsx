@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { archiveAccount, createAccount, CURRENCY_CODES, updateAccount, type Account, type AccountType } from '@/entities/account';
+import { useAccountBalance } from '@/entities/transaction';
 import { colorPresets } from '@/shared/lib/color-presets';
 import { formatCurrency } from '@/shared/lib/format-currency';
 import { parseAmount } from '@/shared/lib/parse-amount';
@@ -35,6 +36,8 @@ export function AccountFormFields({ existingAccount, locale, onSaved, onArchived
   const [currency, setCurrency] = useState(existingAccount?.currency ?? CURRENCY_CODES[0]);
   const [initialBalanceText, setInitialBalanceText] = useState('');
   const [color, setColor] = useState(existingAccount?.color ?? colorPresets[0]);
+  const balance = useAccountBalance(existingAccount);
+  const hasBalance = !!existingAccount && balance !== 0;
 
   function handleChangeName(text: string) {
     setName(text);
@@ -57,10 +60,20 @@ export function AccountFormFields({ existingAccount, locale, onSaved, onArchived
   }
 
   function handleArchive() {
-    if (existingAccount) {
-      void archiveAccount(existingAccount.id);
-      onArchived?.();
+    if (!existingAccount || hasBalance) {
+      return;
     }
+    Alert.alert(t('accounts.archiveConfirmTitle'), t('accounts.archiveConfirmMessage'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('accounts.archive'),
+        style: 'destructive',
+        onPress: () => {
+          void archiveAccount(existingAccount.id);
+          onArchived?.();
+        },
+      },
+    ]);
   }
 
   return (
@@ -120,9 +133,20 @@ export function AccountFormFields({ existingAccount, locale, onSaved, onArchived
       <View className="absolute inset-x-0 bottom-0 gap-1 px-4 pb-4 pt-2">
         <GlassButton label={t('accounts.save')} onPress={handleSave} />
         {existingAccount && (
-          <Pressable onPress={handleArchive} className="items-center py-3 active:opacity-70">
-            <Text className="text-base font-medium text-[#FF3B30]">{t('accounts.archive')}</Text>
-          </Pressable>
+          <View className="items-center">
+            <Pressable
+              onPress={handleArchive}
+              disabled={hasBalance}
+              className={`items-center py-3 active:opacity-70 ${hasBalance ? 'opacity-40' : ''}`}
+            >
+              <Text className="text-base font-medium text-[#FF3B30]">{t('accounts.archive')}</Text>
+            </Pressable>
+            {hasBalance && (
+              <Text className="px-4 pb-2 text-center text-xs text-neutral-400 dark:text-neutral-500">
+                {t('accounts.archiveBlockedByBalance')}
+              </Text>
+            )}
+          </View>
         )}
       </View>
     </View>
