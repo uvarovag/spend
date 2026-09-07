@@ -104,5 +104,21 @@
       "card": "Card",
       "savings": "Savings"
     }
+  },
+  "onboarding": {
+    "skip": "Skip",
+    "next": "Next",
+    "step1": {
+      "title": "Welcome to Spend",
+      "accounts": "Accounts — track cash, cards, and savings separately",
+      "categories": "Categories — see where your money goes",
+      "transactions": "Log expenses, income, and transfers in seconds"
+    },
+    "step2": {
+      "title": "Add your first account"
+    },
+    "step3": {
+      "title": "Add a category"
+    }
   }
 }

@@ -87,6 +87,7 @@ export default function RootLayout() {
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="onboarding" options={{ gestureEnabled: false }} />
             <Stack.Screen name="add-transaction" options={{ presentation: 'modal' }} />
             <Stack.Screen name="transaction-detail" options={{ presentation: 'modal' }} />
             <Stack.Screen name="pick-category" />

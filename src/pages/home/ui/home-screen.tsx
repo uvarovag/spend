@@ -1,11 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import { useState } from 'react';
+import { Redirect, router } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { defaultFeedFilters, setFeedFilters } from '@/features/feed-filters';
+import { completeOnboarding, useOnboardingCompleted } from '@/features/onboarding';
 import { formatCurrency } from '@/shared/lib/format-currency';
 import { systemColors } from '@/shared/lib/system-colors';
 import { TransactionRow } from '@/widgets/transaction-row';
@@ -46,10 +47,29 @@ function goToFilteredFeed(type: 'expense' | 'income') {
 
 export function HomeScreen() {
   const { t, i18n } = useTranslation();
+  const onboardingCompleted = useOnboardingCompleted();
   const currencies = useCurrencies();
   const [currency, setCurrency] = useState(currencies[0] ?? '');
   const selectedCurrency = currencies.includes(currency) ? currency : (currencies[0] ?? '');
   const summary = useHomeSummary(selectedCurrency);
+
+  // A genuinely first run — no accounts yet — goes to onboarding instead of straight to an empty
+  // Home. Gated on account count, not just the flag: an install that already has accounts (a
+  // __DEV__ seed, or upgrading from a build that predates onboarding) must never be redirected
+  // into onboarding just because the flag was never set — the effect below marks it completed
+  // instead, silently, so this check never fires again for that install. Once genuinely completed
+  // (flag true), it never redirects again either, even if every account is later deleted.
+  const isFirstRun = !onboardingCompleted && currencies.length === 0;
+
+  useEffect(() => {
+    if (!onboardingCompleted && currencies.length > 0) {
+      completeOnboarding();
+    }
+  }, [onboardingCompleted, currencies.length]);
+
+  if (isFirstRun) {
+    return <Redirect href="/onboarding" />;
+  }
 
   if (currencies.length === 0) {
     return (
