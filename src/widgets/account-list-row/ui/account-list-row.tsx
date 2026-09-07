@@ -11,7 +11,7 @@ import { systemColors } from '@/shared/lib/system-colors';
 interface AccountListRowProps {
   account: Account;
   locale: string;
-  onPress: () => void;
+  onPress?: () => void;
   trailing?: ReactNode;
 }
 
@@ -22,6 +22,7 @@ export function AccountListRow({ account, locale, onPress, trailing }: AccountLi
   return (
     <Pressable
       onPress={onPress}
+      disabled={!onPress}
       className="flex-row items-center gap-3 border-b border-neutral-100 px-4 py-3 active:opacity-70 dark:border-neutral-900"
     >
       <View

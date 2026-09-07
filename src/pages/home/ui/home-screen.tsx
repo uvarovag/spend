@@ -99,7 +99,10 @@ export function HomeScreen() {
           </View>
         )}
 
-        <View className="gap-3 rounded-3xl bg-[#007AFF] p-6">
+        <Pressable
+          onPress={() => router.push('/balance-detail')}
+          className="gap-3 rounded-3xl bg-[#007AFF] p-6 active:opacity-90"
+        >
           <Text className="text-sm text-white/70">{t('home.balance')}</Text>
           <Text className="text-4xl font-bold text-white">
             {formatCurrency(summary.totalBalance, selectedCurrency, i18n.language)}
@@ -111,7 +114,7 @@ export function HomeScreen() {
               {formatCurrency(monthNet, selectedCurrency, i18n.language)}
             </Text>
           </View>
-        </View>
+        </Pressable>
 
         <View className="flex-row gap-3">
           <StatCard

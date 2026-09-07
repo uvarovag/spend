@@ -51,6 +51,9 @@
     "netThisMonth": "За месяц",
     "empty": "Нет счетов"
   },
+  "balanceDetail": {
+    "title": "Баланс"
+  },
   "feed": {
     "today": "Сегодня",
     "yesterday": "Вчера",

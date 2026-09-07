@@ -51,6 +51,9 @@
     "netThisMonth": "This month",
     "empty": "No accounts yet"
   },
+  "balanceDetail": {
+    "title": "Balance"
+  },
   "feed": {
     "today": "Today",
     "yesterday": "Yesterday",
