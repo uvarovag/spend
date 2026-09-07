@@ -13,7 +13,8 @@
     },
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.uvarovag.spend"
+      "bundleIdentifier": "com.uvarovag.spend",
+      "buildNumber": "1"
     },
     "web": {
       "output": "static",
@@ -29,7 +30,8 @@
           "imageWidth": 76
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true,

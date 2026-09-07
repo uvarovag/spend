@@ -39,7 +39,7 @@ export function CategoryManageScreen() {
         <DraggableCategoryList
           categories={categories}
           onPressCategory={(categoryId) => router.push({ pathname: '/category-form', params: { id: categoryId } })}
-          onReorder={(orderedCategoryIds) => reorderCategories(kind, orderedCategoryIds)}
+          onReorder={(orderedCategoryIds) => void reorderCategories(kind, orderedCategoryIds)}
         />
       </ScrollView>
     </SafeAreaView>

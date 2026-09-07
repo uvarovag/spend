@@ -1,31 +1,91 @@
-import { createStore } from '@/shared/lib/create-store';
+import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
+import { eq } from 'drizzle-orm';
+
+import { getDatabase } from '@/shared/lib/db-bridge';
+import { notifyWriteFailure } from '@/shared/lib/error-notifications';
 import { generateId } from '@/shared/lib/generate-id';
-import { useStore } from '@/shared/lib/use-store';
+import { dispatch, getState, useAppSelector } from '@/shared/lib/store-bridge';
 
 import { mockTransactions } from './mock-data';
+import { transactionsTable } from './schema';
+import { mapRowToTransaction, mapTransactionToRow } from './transaction-row';
 import type { NewTransaction, Transaction } from './types';
 
-const transactionStore = createStore<Transaction[]>(mockTransactions);
+const transactionsAdapter = createEntityAdapter<Transaction>({
+  sortComparer: (a, b) => b.date.localeCompare(a.date),
+});
+
+const transactionsSlice = createSlice({
+  name: 'transactions',
+  initialState: transactionsAdapter.getInitialState(),
+  reducers: {
+    transactionAdded: transactionsAdapter.addOne,
+    transactionUpdated: transactionsAdapter.updateOne,
+    transactionDeleted: transactionsAdapter.removeOne,
+    // Replaces the whole collection with what was just read from SQLite at startup.
+    transactionsHydrated: transactionsAdapter.setAll,
+  },
+});
+
+export const transactionsReducer = transactionsSlice.reducer;
+const { transactionAdded, transactionUpdated, transactionDeleted, transactionsHydrated } = transactionsSlice.actions;
+
+const transactionsSelectors = transactionsAdapter.getSelectors();
 
 export function useTransactions(): Transaction[] {
-  return useStore(transactionStore, (transactions) => transactions);
+  return useAppSelector((state) => transactionsSelectors.selectAll(state.transactions));
 }
 
-export function addTransaction(transaction: NewTransaction): void {
+// Reads the full transactions table into Redux at app startup (business-logic-plan.md, Step 9).
+// In __DEV__, seeds the table from `mock-data.ts` first if it's still empty (Step 8) — a real
+// build never seeds, it just starts with zero transactions (docs/app-overview.md).
+export async function hydrateTransactions(): Promise<void> {
+  const database = getDatabase();
+  if (__DEV__) {
+    const [firstRow] = await database.select({ id: transactionsTable.id }).from(transactionsTable).limit(1);
+    if (!firstRow) {
+      await database.insert(transactionsTable).values(mockTransactions.map(mapTransactionToRow));
+    }
+  }
+  const rows = await database.select().from(transactionsTable);
+  dispatch(transactionsHydrated(rows.map(mapRowToTransaction)));
+}
+
+// Write-through persistence (business-logic-plan.md, Step 10) — see `use-accounts.ts` for the
+// rationale: optimistic Redux update first, background SQLite write second, failures logged and
+// surfaced (Step 14) but never rolled back.
+export async function addTransaction(transaction: NewTransaction): Promise<void> {
   const id = generateId('transaction');
-  transactionStore.setState((transactions) => [{ ...transaction, id } as Transaction, ...transactions]);
+  const newTransaction = { ...transaction, id } as Transaction;
+  dispatch(transactionAdded(newTransaction));
+  try {
+    await getDatabase().insert(transactionsTable).values(mapTransactionToRow(newTransaction));
+  } catch (error) {
+    console.error('Failed to persist new transaction:', error);
+    notifyWriteFailure();
+  }
 }
 
 export function getTransaction(id: string): Transaction | undefined {
-  return transactionStore.getState().find((transaction) => transaction.id === id);
+  return transactionsSelectors.selectById(getState().transactions, id);
 }
 
-export function updateTransaction(id: string, changes: Partial<NewTransaction>): void {
-  transactionStore.setState((transactions) =>
-    transactions.map((transaction) => (transaction.id === id ? ({ ...transaction, ...changes } as Transaction) : transaction)),
-  );
+export async function updateTransaction(id: string, changes: Partial<NewTransaction>): Promise<void> {
+  dispatch(transactionUpdated({ id, changes }));
+  try {
+    await getDatabase().update(transactionsTable).set(changes).where(eq(transactionsTable.id, id));
+  } catch (error) {
+    console.error('Failed to persist transaction update:', error);
+    notifyWriteFailure();
+  }
 }
 
-export function deleteTransaction(id: string): void {
-  transactionStore.setState((transactions) => transactions.filter((transaction) => transaction.id !== id));
+export async function deleteTransaction(id: string): Promise<void> {
+  dispatch(transactionDeleted(id));
+  try {
+    await getDatabase().delete(transactionsTable).where(eq(transactionsTable.id, id));
+  } catch (error) {
+    console.error('Failed to persist transaction delete:', error);
+    notifyWriteFailure();
+  }
 }

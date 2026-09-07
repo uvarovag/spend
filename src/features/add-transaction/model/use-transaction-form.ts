@@ -31,7 +31,7 @@ export function useTransactionForm(kind: AmountTransactionType) {
       return false;
     }
 
-    addTransaction({
+    void addTransaction({
       type: kind,
       date: date.toISOString(),
       note,

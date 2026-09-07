@@ -122,7 +122,7 @@ export function useTransferForm(): TransferFormState {
       return false;
     }
 
-    addTransaction({
+    void addTransaction({
       type: 'transfer',
       date: core.date.toISOString(),
       note: '',

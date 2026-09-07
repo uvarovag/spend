@@ -18,6 +18,9 @@ export const defaultFeedFilters: FeedFilters = {
   period: 'all',
 };
 
+// No persistKey (business-logic-plan.md, Step 11): a working draft of the current Feed view, not
+// a setting — persisting it would make a restarted app look like it silently lost transactions
+// whenever the user had left a filter applied.
 const feedFiltersStore = createValueStore<FeedFilters>(defaultFeedFilters);
 
 export function useFeedFilters(): FeedFilters {

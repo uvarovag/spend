@@ -4,6 +4,9 @@
     "back": "Back",
     "done": "Done"
   },
+  "errors": {
+    "saveFailed": "Couldn't save your changes to this device"
+  },
   "tabs": {
     "home": "Overview",
     "feed": "Feed",
@@ -81,6 +84,7 @@
     "editTitle": "Category",
     "newTitle": "New category",
     "namePlaceholder": "Name",
+    "nameRequired": "Enter a name",
     "icon": "Icon",
     "color": "Color",
     "save": "Save",
@@ -90,6 +94,7 @@
     "editTitle": "Account",
     "newTitle": "New account",
     "namePlaceholder": "Name",
+    "nameRequired": "Enter a name",
     "initialBalance": "Initial balance",
     "color": "Color",
     "save": "Save",

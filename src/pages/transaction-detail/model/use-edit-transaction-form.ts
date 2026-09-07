@@ -31,7 +31,7 @@ export function useEditTransactionForm(transaction: ExpenseTransaction | IncomeT
       return false;
     }
 
-    updateTransaction(transaction.id, {
+    void updateTransaction(transaction.id, {
       date: date.toISOString(),
       note,
       accountId,

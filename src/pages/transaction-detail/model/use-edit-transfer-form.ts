@@ -22,7 +22,7 @@ export function useEditTransferForm(transaction: TransferTransaction): TransferF
       return false;
     }
 
-    updateTransaction(transaction.id, {
+    void updateTransaction(transaction.id, {
       date: core.date.toISOString(),
       fromAccountId: core.fromAccountId,
       toAccountId: core.toAccountId,

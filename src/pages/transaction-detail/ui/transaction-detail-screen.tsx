@@ -144,7 +144,7 @@ export function TransactionDetailScreen() {
   const currentTransaction = transaction;
 
   function handleDelete() {
-    deleteTransaction(currentTransaction.id);
+    void deleteTransaction(currentTransaction.id);
     router.back();
   }
 

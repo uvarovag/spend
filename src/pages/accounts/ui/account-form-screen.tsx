@@ -24,28 +24,35 @@ export function AccountFormScreen() {
   const existingAccount = id ? getAccount(id) : undefined;
 
   const [name, setName] = useState(existingAccount?.name ?? '');
+  const [nameError, setNameError] = useState<string | null>(null);
   const [type, setType] = useState<AccountType>(existingAccount?.type ?? 'card');
   const [currency, setCurrency] = useState(existingAccount?.currency ?? CURRENCY_CODES[0]);
   const [initialBalanceText, setInitialBalanceText] = useState('');
   const [color, setColor] = useState(existingAccount?.color ?? colorPresets[0]);
 
+  function handleChangeName(text: string) {
+    setName(text);
+    setNameError(null);
+  }
+
   function handleSave() {
     const trimmedName = name.trim();
     if (trimmedName.length === 0) {
+      setNameError(t('accounts.nameRequired'));
       return;
     }
 
     if (existingAccount) {
-      updateAccount(existingAccount.id, { name: trimmedName, type, color });
+      void updateAccount(existingAccount.id, { name: trimmedName, type, color });
     } else {
-      createAccount({ name: trimmedName, type, currency, initialBalance: parseAmount(initialBalanceText), color });
+      void createAccount({ name: trimmedName, type, currency, initialBalance: parseAmount(initialBalanceText), color });
     }
     router.back();
   }
 
   function handleArchive() {
     if (existingAccount) {
-      archiveAccount(existingAccount.id);
+      void archiveAccount(existingAccount.id);
       router.back();
     }
   }
@@ -62,11 +69,12 @@ export function AccountFormScreen() {
             <View className="h-16 w-16 rounded-full" style={{ backgroundColor: color }} />
             <TextInput
               value={name}
-              onChangeText={setName}
+              onChangeText={handleChangeName}
               placeholder={t('accounts.namePlaceholder')}
               placeholderTextColor={systemColors.gray}
               className="w-full rounded-xl bg-neutral-100 px-4 py-3 text-center text-base text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50"
             />
+            {nameError && <Text className="text-xs text-[#FF3B30]">{nameError}</Text>}
           </View>
 
           <SegmentedSwitcher

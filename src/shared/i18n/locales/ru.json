@@ -4,6 +4,9 @@
     "back": "Назад",
     "done": "Готово"
   },
+  "errors": {
+    "saveFailed": "Не удалось сохранить изменения на устройстве"
+  },
   "tabs": {
     "home": "Обзор",
     "feed": "Лента",
@@ -81,6 +84,7 @@
     "editTitle": "Категория",
     "newTitle": "Новая категория",
     "namePlaceholder": "Название",
+    "nameRequired": "Введите название",
     "icon": "Иконка",
     "color": "Цвет",
     "save": "Сохранить",
@@ -90,6 +94,7 @@
     "editTitle": "Счёт",
     "newTitle": "Новый счёт",
     "namePlaceholder": "Название",
+    "nameRequired": "Введите название",
     "initialBalance": "Начальный баланс",
     "color": "Цвет",
     "save": "Сохранить",

@@ -1,6 +1,6 @@
 import { createValueStore } from '@/shared/lib/create-value-store';
 
-const lastUsedAccountStore = createValueStore<string | null>(null);
+const lastUsedAccountStore = createValueStore<string | null>(null, 'last-used-account-id');
 
 export function useLastUsedAccountId(): string | null {
   return lastUsedAccountStore.useValue();

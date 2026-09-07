@@ -21,24 +21,31 @@ export function CategoryFormScreen() {
   const kind = existingCategory?.kind ?? kindParam ?? 'expense';
 
   const [name, setName] = useState(existingCategory?.name ?? '');
+  const [nameError, setNameError] = useState<string | null>(null);
   const [icon, setIcon] = useState(existingCategory?.icon ?? categoryIconPresets[0]);
   const [color, setColor] = useState(existingCategory?.color ?? colorPresets[0]);
 
+  function handleChangeName(text: string) {
+    setName(text);
+    setNameError(null);
+  }
+
   function handleSave() {
     if (name.trim().length === 0) {
+      setNameError(t('categories.nameRequired'));
       return;
     }
     if (existingCategory) {
-      updateCategory(existingCategory.id, { name: name.trim(), icon, color });
+      void updateCategory(existingCategory.id, { name: name.trim(), icon, color });
     } else {
-      createCategory({ name: name.trim(), icon, color, kind });
+      void createCategory({ name: name.trim(), icon, color, kind });
     }
     router.back();
   }
 
   function handleArchive() {
     if (existingCategory) {
-      archiveCategory(existingCategory.id);
+      void archiveCategory(existingCategory.id);
       router.back();
     }
   }
@@ -57,11 +64,12 @@ export function CategoryFormScreen() {
             </View>
             <TextInput
               value={name}
-              onChangeText={setName}
+              onChangeText={handleChangeName}
               placeholder={t('categories.namePlaceholder')}
               placeholderTextColor={systemColors.gray}
               className="w-full rounded-xl bg-neutral-100 px-4 py-3 text-center text-base text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50"
             />
+            {nameError && <Text className="text-xs text-[#FF3B30]">{nameError}</Text>}
           </View>
 
           <View className="gap-2">
