@@ -5,20 +5,22 @@ import { addTransaction, type TransactionType } from '@/entities/transaction';
 import { evaluateAmountExpression } from '@/shared/lib/evaluate-amount-expression';
 import { applyKeypadKey } from '@/shared/lib/keypad-input';
 
-import { setLastUsedAccountId, useLastUsedAccountId } from './last-used-account-store';
+import { useFrequentAccountId } from './use-frequent-account-id';
 
 type AmountTransactionType = Extract<TransactionType, 'expense' | 'income'>;
 
 export function useTransactionForm(kind: AmountTransactionType) {
   const accounts = useAccounts();
-  const lastUsedAccountId = useLastUsedAccountId();
+  const frequentAccountId = useFrequentAccountId(kind === 'expense' ? 'debit' : 'credit');
   const [accountIdOverride, setAccountIdOverride] = useState<string | undefined>(undefined);
   const [amountExpression, setAmountExpression] = useState('');
   const [date, setDate] = useState(() => new Date());
   const [note, setNote] = useState('');
   const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
 
-  const accountId = accountIdOverride ?? lastUsedAccountId ?? accounts[0]?.id;
+  // rankAccountsByRoleFrequency always returns every account (falling back to the accounts'
+  // original order once none of them have role usage yet), so no further fallback is needed here.
+  const accountId = accountIdOverride ?? frequentAccountId;
   const canSubmit = evaluateAmountExpression(amountExpression) > 0 && !!accountId && !!categoryId;
 
   function pressKey(key: string) {
@@ -40,7 +42,6 @@ export function useTransactionForm(kind: AmountTransactionType) {
       amount,
     });
 
-    setLastUsedAccountId(accountId);
     setAmountExpression('');
     setNote('');
     setCategoryId(undefined);

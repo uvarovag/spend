@@ -6,6 +6,8 @@ export type {
   TransactionType,
   TransferTransaction,
 } from './model/types';
+export { accountFrequencyWindowInDays, getRoleAccountId, rankAccountsByRoleFrequency } from './model/account-role';
+export type { AccountRole } from './model/account-role';
 export { computeAccountBalance } from './model/compute-account-balance';
 export { useAccountBalance } from './model/use-account-balance';
 export {

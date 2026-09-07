@@ -4,48 +4,11 @@ import { ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { pickAccount, useAccounts, type Account } from '@/entities/account';
-import { useTransactions, type Transaction } from '@/entities/transaction';
+import { pickAccount, useAccounts } from '@/entities/account';
+import { rankAccountsByRoleFrequency, useTransactions, type AccountRole } from '@/entities/transaction';
 import { systemColors } from '@/shared/lib/system-colors';
 import { ModalHeader } from '@/shared/ui/modal-header';
 import { AccountListRow } from '@/widgets/account-list-row';
-
-type AccountRole = 'debit' | 'credit';
-
-// The account that plays this role most recently is the one the user is most likely to pick
-// again — expense/transfer-from count as "debit", income/transfer-to count as "credit".
-function getRoleAccountId(transaction: Transaction, role: AccountRole): string | undefined {
-  if (role === 'debit') {
-    if (transaction.type === 'expense') {
-      return transaction.accountId;
-    }
-    return transaction.type === 'transfer' ? transaction.fromAccountId : undefined;
-  }
-  if (transaction.type === 'income') {
-    return transaction.accountId;
-  }
-  return transaction.type === 'transfer' ? transaction.toAccountId : undefined;
-}
-
-function sortAccountsByRole(accounts: Account[], transactions: Transaction[], role: AccountRole): Account[] {
-  const lastUsedDateByAccountId = new Map<string, number>();
-
-  for (const transaction of transactions) {
-    const accountId = getRoleAccountId(transaction, role);
-    if (!accountId) {
-      continue;
-    }
-    const time = new Date(transaction.date).getTime();
-    const previousTime = lastUsedDateByAccountId.get(accountId);
-    if (previousTime === undefined || time > previousTime) {
-      lastUsedDateByAccountId.set(accountId, time);
-    }
-  }
-
-  return [...accounts].sort(
-    (a, b) => (lastUsedDateByAccountId.get(b.id) ?? -Infinity) - (lastUsedDateByAccountId.get(a.id) ?? -Infinity)
-  );
-}
 
 export function PickAccountScreen() {
   const { t, i18n } = useTranslation();
@@ -62,7 +25,7 @@ export function PickAccountScreen() {
     (account) => account.id !== excludeAccountId && (!allowedAccountIdSet || allowedAccountIdSet.has(account.id))
   );
   const transactions = useTransactions();
-  const accounts = role ? sortAccountsByRole(filteredAccounts, transactions, role) : filteredAccounts;
+  const accounts = role ? rankAccountsByRoleFrequency(filteredAccounts, transactions, role) : filteredAccounts;
 
   function handleSelect(accountId: string) {
     pickAccount(requestId, accountId);

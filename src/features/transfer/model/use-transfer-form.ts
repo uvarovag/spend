@@ -1,10 +1,8 @@
 import { useAccounts, type Account } from '@/entities/account';
-import { addTransaction, useTransactions, type Transaction } from '@/entities/transaction';
+import { accountFrequencyWindowInDays, addTransaction, useTransactions, type Transaction } from '@/entities/transaction';
 import { parseAmount } from '@/shared/lib/parse-amount';
 
 import { useTransferFormCore } from './use-transfer-form-core';
-
-const transferPairFrequencyWindowInDays = 30;
 
 interface TransferPair {
   fromAccountId: string;
@@ -12,10 +10,10 @@ interface TransferPair {
 }
 
 // Prefills the transfer with the account pair the user transfers between most often, rather than
-// always starting from the first two accounts in the list — mirrors the frequent-categories default
-// for expense/income (see use-frequent-categories.ts), same analysis window.
+// always starting from the first two accounts in the list — same analysis window as every other
+// "which account does the user use most" default (accountFrequencyWindowInDays).
 function findMostFrequentTransferPair(transactions: Transaction[], accounts: Account[]): TransferPair | undefined {
-  const windowStart = Date.now() - transferPairFrequencyWindowInDays * 24 * 60 * 60 * 1000;
+  const windowStart = Date.now() - accountFrequencyWindowInDays * 24 * 60 * 60 * 1000;
   const accountIds = new Set(accounts.map((account) => account.id));
   const usageCountByPair = new Map<string, { pair: TransferPair; count: number }>();
 
