@@ -52,6 +52,10 @@ export function useCategories(kind: CategoryKind): Category[] {
   return useAppSelector((state) => selectCategoriesOfKind(state.categories, kind));
 }
 
+export function useCategory(categoryId: string | undefined): Category | undefined {
+  return useAppSelector((state) => (categoryId ? categoriesSelectors.selectById(state.categories, categoryId) : undefined));
+}
+
 export function getCategory(categoryId: string): Category | undefined {
   return categoriesSelectors.selectById(getState().categories, categoryId);
 }

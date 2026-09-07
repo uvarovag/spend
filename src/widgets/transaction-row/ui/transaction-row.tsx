@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Pressable, Text, View } from 'react-native';
 
-import { getAccount } from '@/entities/account';
-import { getCategory } from '@/entities/category';
+import { useAccount } from '@/entities/account';
+import { useCategory } from '@/entities/category';
 import type { Transaction } from '@/entities/transaction';
 import { formatCurrency, formatNumber } from '@/shared/lib/format-currency';
 import { systemColors } from '@/shared/lib/system-colors';
@@ -14,10 +14,17 @@ interface TransactionRowProps {
 }
 
 export function TransactionRow({ transaction, locale, onPress }: TransactionRowProps) {
-  if (transaction.type === 'transfer') {
-    const fromAccount = getAccount(transaction.fromAccountId);
-    const toAccount = getAccount(transaction.toAccountId);
+  const isTransfer = transaction.type === 'transfer';
+  // Reactive lookups (not the non-hook getAccount/getCategory) so a rename/recolor elsewhere in
+  // the app is reflected here immediately — this row can stay mounted for a long time (Feed/Home
+  // live inside tabs that React Navigation keeps mounted in the background) without anything else
+  // forcing a re-render.
+  const fromAccount = useAccount(isTransfer ? transaction.fromAccountId : undefined);
+  const toAccount = useAccount(isTransfer ? transaction.toAccountId : undefined);
+  const account = useAccount(!isTransfer ? transaction.accountId : undefined);
+  const category = useCategory(!isTransfer ? transaction.categoryId : undefined);
 
+  if (isTransfer) {
     return (
       <Pressable onPress={onPress} className="flex-row items-center gap-3 px-4 py-3 active:opacity-70">
         <View className="h-10 w-10 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-800">
@@ -40,8 +47,6 @@ export function TransactionRow({ transaction, locale, onPress }: TransactionRowP
     );
   }
 
-  const category = getCategory(transaction.categoryId);
-  const account = getAccount(transaction.accountId);
   const isExpense = transaction.type === 'expense';
 
   return (
