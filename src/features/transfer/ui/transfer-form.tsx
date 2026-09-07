@@ -30,7 +30,7 @@ function AmountField({ label, value, onChangeText }: AmountFieldProps) {
         onChangeText={onChangeText}
         placeholder="0"
         placeholderTextColor={systemColors.gray}
-        className="rounded-xl bg-neutral-100 px-4 py-2.5 text-lg text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50"
+        className="h-12 rounded-xl bg-neutral-100 px-4 text-[16px] text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50"
       />
     </View>
   );

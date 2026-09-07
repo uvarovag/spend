@@ -86,7 +86,7 @@ export function AccountFormFields({ existingAccount, locale, onSaved, onArchived
             onChangeText={handleChangeName}
             placeholder={t('accounts.namePlaceholder')}
             placeholderTextColor={systemColors.gray}
-            className="w-full rounded-xl bg-neutral-100 px-4 py-3 text-center text-base text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50"
+            className="h-12 w-full rounded-xl bg-neutral-100 px-4 text-center text-[16px] text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50"
           />
           {nameError && <Text className="text-xs text-[#FF3B30]">{nameError}</Text>}
         </View>
@@ -99,16 +99,16 @@ export function AccountFormFields({ existingAccount, locale, onSaved, onArchived
         />
 
         <View className="flex-row items-center gap-3">
-          <View className="w-24 items-center justify-center rounded-xl bg-neutral-100 py-3 dark:bg-neutral-900">
+          <View className="h-12 w-24 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-900">
             {existingAccount ? (
-              <Text className="text-base text-neutral-500 dark:text-neutral-400">{currency}</Text>
+              <Text className="text-[16px] text-neutral-500 dark:text-neutral-400">{currency}</Text>
             ) : (
               <CurrencyPicker value={currency} onChange={setCurrency} />
             )}
           </View>
           {existingAccount ? (
-            <View className="flex-1 rounded-xl bg-neutral-100 px-4 py-2.5 dark:bg-neutral-900">
-              <Text className="text-lg text-neutral-500 dark:text-neutral-400">
+            <View className="h-12 flex-1 justify-center rounded-xl bg-neutral-100 px-4 dark:bg-neutral-900">
+              <Text className="text-[16px] text-neutral-500 dark:text-neutral-400">
                 {formatCurrency(existingAccount.initialBalance, currency, locale)}
               </Text>
             </View>
@@ -119,7 +119,7 @@ export function AccountFormFields({ existingAccount, locale, onSaved, onArchived
               placeholder={t('accounts.initialBalance')}
               placeholderTextColor={systemColors.gray}
               keyboardType="decimal-pad"
-              className="flex-1 rounded-xl bg-neutral-100 px-4 py-2.5 text-lg text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50"
+              className="h-12 flex-1 rounded-xl bg-neutral-100 px-4 text-[16px] text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50"
             />
           )}
         </View>

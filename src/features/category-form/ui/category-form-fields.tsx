@@ -68,7 +68,7 @@ export function CategoryFormFields({ existingCategory, kind, onSaved, onArchived
             onChangeText={handleChangeName}
             placeholder={t('categories.namePlaceholder')}
             placeholderTextColor={systemColors.gray}
-            className="w-full rounded-xl bg-neutral-100 px-4 py-3 text-center text-base text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50"
+            className="h-12 w-full rounded-xl bg-neutral-100 px-4 text-center text-[16px] text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50"
           />
           {nameError && <Text className="text-xs text-[#FF3B30]">{nameError}</Text>}
         </View>

@@ -17,14 +17,14 @@ export function NoteField({ value, onChange }: NoteFieldProps) {
     return (
       <Pressable
         onPress={() => setExpanded(true)}
-        className="mx-4 my-2 rounded-xl bg-neutral-100 px-3 py-3.5 dark:bg-neutral-900"
+        className="mx-4 my-2 rounded-xl bg-neutral-100 px-4 py-3.5 dark:bg-neutral-900"
       >
         <Text
           numberOfLines={2}
           className={
             value.length > 0
-              ? 'text-sm text-neutral-900 dark:text-neutral-50'
-              : 'text-sm text-neutral-400 dark:text-neutral-500'
+              ? 'text-[16px] text-neutral-900 dark:text-neutral-50'
+              : 'text-[16px] text-neutral-400 dark:text-neutral-500'
           }
         >
           {value.length > 0 ? value : t('addTransaction.notePlaceholder')}
@@ -34,7 +34,7 @@ export function NoteField({ value, onChange }: NoteFieldProps) {
   }
 
   return (
-    <View className="mx-4 my-2 rounded-xl bg-neutral-100 px-3 py-3 dark:bg-neutral-900">
+    <View className="mx-4 my-2 rounded-xl bg-neutral-100 px-4 py-3 dark:bg-neutral-900">
       <Pressable onPress={() => Keyboard.dismiss()} hitSlop={8} className="self-end pb-1">
         <Text className="text-xs font-medium text-[#007AFF]">{t('addTransaction.noteDone')}</Text>
       </Pressable>
@@ -47,7 +47,7 @@ export function NoteField({ value, onChange }: NoteFieldProps) {
         placeholder={t('addTransaction.notePlaceholder')}
         placeholderTextColor={systemColors.gray}
         onBlur={() => setExpanded(false)}
-        className="min-h-[80px] text-sm text-neutral-900 dark:text-neutral-50"
+        className="min-h-[80px] text-[16px] text-neutral-900 dark:text-neutral-50"
       />
     </View>
   );
