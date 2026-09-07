@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { KeyboardAvoidingView, Pressable, ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,6 +13,7 @@ import {
   NoteField,
   clearPickedCategoryId,
   useFrequentCategories,
+  useNoteRelevantCategories,
   usePickedCategoryId,
 } from '@/features/add-transaction';
 import { TransferForm } from '@/features/transfer';
@@ -37,14 +38,24 @@ function EditAmountTransactionForm({
   const { t, i18n } = useTranslation();
   const form = useEditTransactionForm(transaction);
   const frequentCategories = useFrequentCategories(transaction.type);
+  const noteRelevantCategories = useNoteRelevantCategories(transaction.type, form.note);
   const account = useAccount(form.accountId);
   const pickedCategoryId = usePickedCategoryId();
   const pickedAccount = usePickedAccount();
+  // The category already saved on this transaction is itself a deliberate choice — editing the
+  // note must not silently swap it out, only a fresh manual/note-driven pick does.
+  const categoryManuallySetRef = useRef(true);
+
+  function handleSelectCategory(categoryId: string) {
+    categoryManuallySetRef.current = true;
+    form.setCategoryId(categoryId);
+  }
 
   // Reacts only to a new pick from the categories screen, not to every re-render.
   useEffect(() => {
     if (pickedCategoryId) {
       clearPickedCategoryId();
+      categoryManuallySetRef.current = true;
       form.setCategoryId(pickedCategoryId);
     }
   }, [pickedCategoryId]);
@@ -57,6 +68,9 @@ function EditAmountTransactionForm({
     }
   }, [pickedAccount]);
 
+  const rankedCategories =
+    noteRelevantCategories.categories.length > 0 ? noteRelevantCategories.categories : frequentCategories;
+
   return (
     <KeyboardAvoidingView className="flex-1" behavior="padding">
       <ScrollView className="flex-1" contentContainerClassName="pb-40" keyboardShouldPersistTaps="handled">
@@ -65,9 +79,9 @@ function EditAmountTransactionForm({
         <View className="pt-4">
           <CategoryPicker
             kind={transaction.type}
-            frequentCategories={frequentCategories}
+            rankedCategories={rankedCategories}
             selectedCategoryId={form.categoryId}
-            onSelect={form.setCategoryId}
+            onSelect={handleSelectCategory}
           />
         </View>
         <View className="pt-4">

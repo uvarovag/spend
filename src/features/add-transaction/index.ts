@@ -1,4 +1,5 @@
 export { useFrequentCategories } from './model/use-frequent-categories';
+export { useNoteRelevantCategories } from './model/use-note-relevant-categories';
 export { clearPickedCategoryId, pickCategoryId, usePickedCategoryId } from './model/picked-category-store';
 export { useTransactionForm } from './model/use-transaction-form';
 export { AccountDateSection } from './ui/account-date-section';

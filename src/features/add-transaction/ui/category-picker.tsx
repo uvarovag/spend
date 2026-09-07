@@ -12,19 +12,21 @@ const tileWidthClassName = 'w-16';
 
 interface CategoryPickerProps {
   kind: CategoryKind;
-  frequentCategories: Category[];
+  // Whichever ranking is currently most useful — frequent-by-usage by default, or
+  // note-text-relevant once the user has typed something (see AmountTransactionForm).
+  rankedCategories: Category[];
   selectedCategoryId?: string;
   onSelect: (categoryId: string) => void;
 }
 
-export function CategoryPicker({ kind, frequentCategories, selectedCategoryId, onSelect }: CategoryPickerProps) {
+export function CategoryPicker({ kind, rankedCategories, selectedCategoryId, onSelect }: CategoryPickerProps) {
   const { t } = useTranslation();
   const allCategories = useCategories(kind);
-  const hasMore = allCategories.length > frequentCategories.length;
+  const hasMore = allCategories.length > rankedCategories.length;
 
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="flex-row gap-2 px-4">
-      {frequentCategories.map((category) => (
+      {rankedCategories.map((category) => (
         <CategoryTile
           key={category.id}
           category={category}

@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { KeyboardAvoidingView, ScrollView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,6 +13,7 @@ import {
   NoteField,
   clearPickedCategoryId,
   useFrequentCategories,
+  useNoteRelevantCategories,
   usePickedCategoryId,
   useTransactionForm,
 } from '@/features/add-transaction';
@@ -33,14 +34,24 @@ interface AmountTransactionFormProps {
 function AmountTransactionForm({ kind, form, onSubmit, canSubmit }: AmountTransactionFormProps) {
   const { t, i18n } = useTranslation();
   const frequentCategories = useFrequentCategories(kind);
+  const noteRelevantCategories = useNoteRelevantCategories(kind, form.note);
   const account = useAccount(form.accountId);
   const pickedCategoryId = usePickedCategoryId();
   const pickedAccount = usePickedAccount();
+  // Once the user has manually picked a category, further note edits must not silently swap it
+  // out from under them.
+  const categoryManuallySetRef = useRef(false);
+
+  function handleSelectCategory(categoryId: string) {
+    categoryManuallySetRef.current = true;
+    form.setCategoryId(categoryId);
+  }
 
   // Reacts only to a new pick from the categories screen, not to every re-render.
   useEffect(() => {
     if (pickedCategoryId) {
       clearPickedCategoryId();
+      categoryManuallySetRef.current = true;
       form.setCategoryId(pickedCategoryId);
     }
   }, [pickedCategoryId]);
@@ -53,6 +64,16 @@ function AmountTransactionForm({ kind, form, onSubmit, canSubmit }: AmountTransa
     }
   }, [pickedAccount]);
 
+  // Only auto-picks while the category is still unset by the user, and never fights a manual pick.
+  useEffect(() => {
+    if (noteRelevantCategories.autoSelectCategoryId && !categoryManuallySetRef.current) {
+      form.setCategoryId(noteRelevantCategories.autoSelectCategoryId);
+    }
+  }, [noteRelevantCategories.autoSelectCategoryId]);
+
+  const rankedCategories =
+    noteRelevantCategories.categories.length > 0 ? noteRelevantCategories.categories : frequentCategories;
+
   return (
     <KeyboardAvoidingView className="flex-1" behavior="padding">
       <ScrollView className="flex-1" contentContainerClassName="pb-40" keyboardShouldPersistTaps="handled">
@@ -62,9 +83,9 @@ function AmountTransactionForm({ kind, form, onSubmit, canSubmit }: AmountTransa
         <View className="pt-4">
           <CategoryPicker
             kind={kind}
-            frequentCategories={frequentCategories}
+            rankedCategories={rankedCategories}
             selectedCategoryId={form.categoryId}
-            onSelect={form.setCategoryId}
+            onSelect={handleSelectCategory}
           />
         </View>
         <View className="pt-4">
