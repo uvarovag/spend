@@ -76,6 +76,7 @@ function EditAmountTransactionForm({
       <ScrollView className="flex-1" contentContainerClassName="pb-40" keyboardShouldPersistTaps="handled">
         <AmountInput expression={form.amountExpression} currency={account?.currency ?? ''} locale={i18n.language} />
         <NumericKeypad onKeyPress={form.pressKey} />
+        <NoteField value={form.note} onChange={form.setNote} />
         <View className="pt-4">
           <CategoryPicker
             kind={transaction.type}
@@ -94,7 +95,6 @@ function EditAmountTransactionForm({
             kind={transaction.type}
           />
         </View>
-        <NoteField value={form.note} onChange={form.setNote} />
       </ScrollView>
       <View className="absolute inset-x-0 bottom-0 gap-1 px-4 pb-4 pt-2">
         <GlassButton
