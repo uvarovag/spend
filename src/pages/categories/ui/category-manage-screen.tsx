@@ -3,7 +3,7 @@ import { router, Stack } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { reorderCategories, useCategories, type CategoryKind } from '@/entities/category';
 import { systemColors } from '@/shared/lib/system-colors';
@@ -13,8 +13,13 @@ import { DraggableCategoryList } from './draggable-category-list';
 
 const kinds: CategoryKind[] = ['expense', 'income'];
 
+// Standard (non-large-title) iOS nav bar content height — fixed regardless of device,
+// unlike the notch/Dynamic Island area already covered by `insets.top`.
+const headerContentHeight = 44;
+
 export function CategoryManageScreen() {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const [kind, setKind] = useState<CategoryKind>('expense');
   const categories = useCategories(kind);
 
@@ -32,14 +37,13 @@ export function CategoryManageScreen() {
           ),
         }}
       />
-      <ScrollView
-        contentContainerClassName="pb-24"
-        contentInsetAdjustmentBehavior="automatic"
-        stickyHeaderIndices={[0]}
+      <View
+        className="bg-white px-4 pb-2 dark:bg-black"
+        style={{ paddingTop: insets.top + headerContentHeight + 8 }}
       >
-        <View className="bg-white px-4 pb-2 pt-2 dark:bg-black">
-          <SegmentedSwitcher value={kind} onChange={setKind} options={kinds} getLabel={(k) => t(`transactionType.${k}`)} />
-        </View>
+        <SegmentedSwitcher value={kind} onChange={setKind} options={kinds} getLabel={(k) => t(`transactionType.${k}`)} />
+      </View>
+      <ScrollView className="flex-1" contentContainerClassName="pb-24">
         <DraggableCategoryList
           categories={categories}
           onPressCategory={(categoryId) => router.push({ pathname: '/category-form', params: { id: categoryId } })}
