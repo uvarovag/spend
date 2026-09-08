@@ -98,7 +98,7 @@
     "save": "Save",
     "archive": "Archive",
     "archiveConfirmTitle": "Archive category?",
-    "archiveConfirmMessage": "It will disappear from every list. This can't be undone."
+    "archiveConfirmMessage": "It disappears from pickers and Settings, but stays as-is on transactions you've already added. This can't be undone."
   },
   "accounts": {
     "editTitle": "Account",
@@ -111,7 +111,7 @@
     "archive": "Archive",
     "archiveBlockedByBalance": "Can't archive while the account still has a balance",
     "archiveConfirmTitle": "Archive account?",
-    "archiveConfirmMessage": "It will disappear from every list. This can't be undone.",
+    "archiveConfirmMessage": "It disappears from pickers and Settings, but stays as-is on transactions you've already added. This can't be undone.",
     "type": {
       "cash": "Cash",
       "card": "Card",
