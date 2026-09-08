@@ -22,6 +22,9 @@ interface CategorySpendingDonutProps {
 }
 
 const chartSize = 220;
+// Keeps the ring a few pixels inside the canvas edge on every side, so it can never be clipped by
+// the canvas's own bounds (e.g. from sub-pixel layout rounding).
+const chartPadding = 8;
 const innerRadiusRatio = 0.72;
 const collapsedLegendLimit = 3;
 
@@ -64,11 +67,12 @@ export function CategorySpendingDonut({ categorySpendings, currency, locale }: C
   function handleChartPress(event: GestureResponderEvent) {
     const { locationX, locationY } = event.nativeEvent;
     const center = chartSize / 2;
+    const chartRadius = center - chartPadding;
     const dx = locationX - center;
     const dy = locationY - center;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (distance < center * innerRadiusRatio || distance > center) {
+    if (distance < chartRadius * innerRadiusRatio || distance > chartRadius) {
       setSelectedIndex(null);
       return;
     }
@@ -90,7 +94,9 @@ export function CategorySpendingDonut({ categorySpendings, currency, locale }: C
     <View className="items-center gap-3">
       <View style={{ width: chartSize, height: chartSize }}>
         <PolarChart data={chartData} labelKey="name" valueKey="amount" colorKey="color">
-          <Pie.Chart innerRadius={`${innerRadiusRatio * 100}%`}>{() => <Pie.Slice />}</Pie.Chart>
+          <Pie.Chart innerRadius={`${innerRadiusRatio * 100}%`} size={chartSize - chartPadding * 2}>
+            {() => <Pie.Slice />}
+          </Pie.Chart>
         </PolarChart>
 
         <View className="absolute inset-0 items-center justify-center" pointerEvents="none">
