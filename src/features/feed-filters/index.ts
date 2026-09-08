@@ -1,5 +1,6 @@
 export {
   defaultFeedFilters,
+  resetFeedFilters,
   setFeedFilters,
   useFeedFilters,
   useIsFeedFiltersActive,

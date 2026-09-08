@@ -4,7 +4,7 @@ import { Pressable, Text, View } from 'react-native';
 import { useAccount } from '@/entities/account';
 import { useCategory } from '@/entities/category';
 import type { Transaction } from '@/entities/transaction';
-import { formatCurrency, formatNumber } from '@/shared/lib/format-currency';
+import { formatCurrency, formatNumber, formatSignedCurrency } from '@/shared/lib/format-currency';
 import { systemColors } from '@/shared/lib/system-colors';
 
 interface TransactionRowProps {
@@ -67,8 +67,9 @@ export function TransactionRow({ transaction, locale, onPress }: TransactionRowP
         </Text>
       </View>
       <Text className={isExpense ? 'text-base text-[#FF3B30]' : 'text-base text-[#34C759]'} numberOfLines={1}>
-        {isExpense ? '−' : '+'}
-        {account ? formatCurrency(transaction.amount, account.currency, locale) : formatNumber(transaction.amount, locale)}
+        {account
+          ? formatSignedCurrency(isExpense ? -transaction.amount : transaction.amount, account.currency, locale)
+          : `${isExpense ? '-' : '+'}${formatNumber(transaction.amount, locale)}`}
       </Text>
     </Pressable>
   );

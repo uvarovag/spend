@@ -22,6 +22,9 @@ export const systemColors = {
 // ----- Theme-dependent UI colors --------------------------------------------
 // Fixed literals (not NativeWind classes) for spots that force an explicit color to match
 // a native SwiftUI surface — see feed-filters-screen.tsx and glass-icon-button.tsx.
+// Plain screen ground (`bg-white dark:bg-black`), as opposed to the grouped-list surface below —
+// the two coincide only in dark mode.
+export const screenBackgroundColor = { light: '#FFFFFF', dark: '#000000' } as const;
 export const groupedBackgroundColor = { light: '#F2F2F7', dark: '#000000' } as const;
 export const labelColor = { light: '#111827', dark: '#F5F5F5' } as const;
 

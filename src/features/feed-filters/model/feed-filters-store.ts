@@ -31,6 +31,10 @@ export function setFeedFilters(updater: FeedFilters | ((filters: FeedFilters) =>
   feedFiltersStore.setValue(updater);
 }
 
+export function resetFeedFilters(): void {
+  feedFiltersStore.setValue(defaultFeedFilters);
+}
+
 export function useIsFeedFiltersActive(): boolean {
   const filters = useFeedFilters();
   return (

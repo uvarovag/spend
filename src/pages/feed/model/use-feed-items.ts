@@ -6,13 +6,19 @@ import { useTransactions, type Transaction } from '@/entities/transaction';
 import type { FeedFilters, FeedPeriod } from '@/features/feed-filters';
 import { formatDate, getStartOfMonth, isSameDay } from '@/shared/lib/format-date';
 
-type FeedListItem =
-  | { kind: 'header'; id: string; label: string }
-  | { kind: 'transaction'; id: string; transaction: Transaction };
-
 export interface CurrencyTotal {
   currency: string;
   amount: number;
+}
+
+type FeedListItem =
+  | { kind: 'header'; id: string; label: string; totals: CurrencyTotal[] }
+  | { kind: 'transaction'; id: string; transaction: Transaction };
+
+interface DayGroup {
+  dateKey: string;
+  label: string;
+  transactions: Transaction[];
 }
 
 function getPeriodStart(period: FeedPeriod): Date | null {
@@ -94,24 +100,35 @@ export function useFeedItems(filters: FeedFilters): { items: FeedListItem[]; tot
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
 
-    const items: FeedListItem[] = [];
-    let lastDateKey: string | null = null;
-
+    // Transactions are already sorted, so consecutive same-day rows form one group.
+    const dayGroups: DayGroup[] = [];
     for (const transaction of sortedTransactions) {
       const date = new Date(transaction.date);
       const dateKey = date.toDateString();
-
-      if (dateKey !== lastDateKey) {
-        const label = isSameDay(date, today)
-          ? t('feed.today')
-          : isSameDay(date, yesterday)
-            ? t('feed.yesterday')
-            : formatDate(date, i18n.language);
-        items.push({ kind: 'header', id: `header-${dateKey}`, label });
-        lastDateKey = dateKey;
+      const lastGroup = dayGroups.at(-1);
+      if (lastGroup?.dateKey === dateKey) {
+        lastGroup.transactions.push(transaction);
+        continue;
       }
+      const label = isSameDay(date, today)
+        ? t('feed.today')
+        : isSameDay(date, yesterday)
+          ? t('feed.yesterday')
+          : formatDate(date, i18n.language);
+      dayGroups.push({ dateKey, label, transactions: [transaction] });
+    }
 
-      items.push({ kind: 'transaction', id: transaction.id, transaction });
+    const items: FeedListItem[] = [];
+    for (const group of dayGroups) {
+      items.push({
+        kind: 'header',
+        id: `header-${group.dateKey}`,
+        label: group.label,
+        totals: computeTotals(group.transactions),
+      });
+      for (const transaction of group.transactions) {
+        items.push({ kind: 'transaction', id: transaction.id, transaction });
+      }
     }
 
     return { items, totals: computeTotals(filteredTransactions) };

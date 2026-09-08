@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useFeedFilters, useIsFeedFiltersActive } from '@/features/feed-filters';
+import { formatSignedCurrency } from '@/shared/lib/format-currency';
 import { GlassIconButton } from '@/shared/ui/glass-icon-button';
 import { TransactionRow } from '@/widgets/transaction-row';
 
@@ -33,9 +34,14 @@ export function FeedScreen() {
         contentContainerStyle={{ paddingBottom: 96 }}
         renderItem={({ item }) =>
           item.kind === 'header' ? (
-            <Text className="px-4 pb-1 pt-4 text-xs font-medium uppercase text-neutral-400 dark:text-neutral-500">
-              {item.label}
-            </Text>
+            <View className="flex-row items-baseline justify-between gap-3 px-4 pb-1 pt-4">
+              <Text className="text-xs font-medium uppercase text-neutral-400 dark:text-neutral-500">{item.label}</Text>
+              <Text numberOfLines={1} className="shrink text-xs font-medium text-neutral-400 dark:text-neutral-500">
+                {item.totals
+                  .map((total) => formatSignedCurrency(total.amount, total.currency, i18n.language))
+                  .join(' · ')}
+              </Text>
+            </View>
           ) : (
             <TransactionRow
               transaction={item.transaction}

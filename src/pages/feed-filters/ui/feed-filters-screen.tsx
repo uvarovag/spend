@@ -9,7 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { truncateAccountName, useAccounts } from '@/entities/account';
 import { useCategories } from '@/entities/category';
 import {
-  defaultFeedFilters,
+  resetFeedFilters,
   setFeedFilters,
   useFeedFilters,
   type FeedFilter,
@@ -164,10 +164,7 @@ export function FeedFiltersScreen() {
 
         <View className="absolute inset-x-0 bottom-0 gap-1 bg-[#F2F2F7] px-4 pb-4 pt-2 dark:bg-black">
           <GlassButton label={t('common.done')} onPress={() => router.back()} />
-          <Pressable
-            onPress={() => setFeedFilters(defaultFeedFilters)}
-            className="items-center py-3 active:opacity-70"
-          >
+          <Pressable onPress={resetFeedFilters} className="items-center py-3 active:opacity-70">
             <Text className="text-base font-medium text-neutral-500 dark:text-neutral-400">
               {t('feed.resetFilters')}
             </Text>

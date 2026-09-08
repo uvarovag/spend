@@ -44,7 +44,7 @@ export function CategoryPicker({ kind, rankedCategories, selectedCategoryId, onS
             <Ionicons name="ellipsis-horizontal" size={22} color={systemColors.gray} />
           </View>
           <Text numberOfLines={1} className="text-xs text-neutral-700 dark:text-neutral-300">
-            {t('addTransaction.categoriesMore')}
+            {t('addTransaction.categoriesAll')}
           </Text>
         </Pressable>
       ) : null}

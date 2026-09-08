@@ -22,7 +22,7 @@
     "transfer": "Transfer"
   },
   "addTransaction": {
-    "categoriesMore": "More",
+    "categoriesAll": "All",
     "categoriesTitle": "Category",
     "notePlaceholder": "Add a note",
     "noteDone": "Done",

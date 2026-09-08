@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { Pie, PolarChart } from 'victory-native';
 
 import { formatCurrency } from '@/shared/lib/format-currency';
-import { systemColors } from '@/shared/lib/system-colors';
+import { screenBackgroundColor, systemColors } from '@/shared/lib/system-colors';
+import { useColorScheme } from '@/shared/lib/use-color-scheme';
 
 import type { CategorySpending } from '../model/use-home-summary';
 
@@ -26,10 +27,16 @@ const chartSize = 220;
 // the canvas's own bounds (e.g. from sub-pixel layout rounding).
 const chartPadding = 8;
 const innerRadiusRatio = 0.72;
+// A gap between adjacent slices, painted in the screen background color, so two neighbouring
+// categories that share a color still read as separate slices instead of one merged arc.
+// Known tradeoff of any slice gap: a slice whose arc is narrower than the gap (< ~0.5% of the
+// total at this ring size) is swallowed by its neighbours' strokes and only shows in the legend.
+const sliceGapWidth = 3;
 const collapsedLegendLimit = 3;
 
 export function CategorySpendingDonut({ categorySpendings, currency, locale }: CategorySpendingDonutProps) {
   const { t } = useTranslation();
+  const colorScheme = useColorScheme();
   const [isLegendExpanded, setLegendExpanded] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
@@ -63,6 +70,12 @@ export function CategorySpendingDonut({ categorySpendings, currency, locale }: C
   );
 
   const selectedCategory = selectedIndex !== null ? categorySpendings[selectedIndex] : undefined;
+  // Home is bg-white / dark:bg-black — the gap has to match, or it reads as a stroke, not a gap.
+  // A single slice has no neighbour, so width 0 (the inset renders nothing) avoids a stray seam.
+  const sliceAngularInset = {
+    angularStrokeWidth: chartData.length > 1 ? sliceGapWidth : 0,
+    angularStrokeColor: colorScheme === 'dark' ? screenBackgroundColor.dark : screenBackgroundColor.light,
+  };
 
   function handleChartPress(event: GestureResponderEvent) {
     const { locationX, locationY } = event.nativeEvent;
@@ -95,7 +108,12 @@ export function CategorySpendingDonut({ categorySpendings, currency, locale }: C
       <View style={{ width: chartSize, height: chartSize }}>
         <PolarChart data={chartData} labelKey="name" valueKey="amount" colorKey="color">
           <Pie.Chart innerRadius={`${innerRadiusRatio * 100}%`} size={chartSize - chartPadding * 2}>
-            {() => <Pie.Slice />}
+            {() => (
+              <>
+                <Pie.Slice />
+                <Pie.SliceAngularInset angularInset={sliceAngularInset} />
+              </>
+            )}
           </Pie.Chart>
         </PolarChart>
 

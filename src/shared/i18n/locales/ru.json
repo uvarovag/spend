@@ -22,7 +22,7 @@
     "transfer": "Перевод"
   },
   "addTransaction": {
-    "categoriesMore": "Ещё",
+    "categoriesAll": "Все",
     "categoriesTitle": "Категория",
     "notePlaceholder": "Добавить заметку",
     "noteDone": "Готово",

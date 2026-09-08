@@ -5,12 +5,13 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { defaultFeedFilters, setFeedFilters } from '@/features/feed-filters';
+import { defaultFeedFilters, resetFeedFilters, setFeedFilters } from '@/features/feed-filters';
 import { completeOnboarding, useOnboardingCompleted } from '@/features/onboarding';
-import { formatCurrency } from '@/shared/lib/format-currency';
+import { formatCurrency, formatSignedCurrency } from '@/shared/lib/format-currency';
 import { systemColors } from '@/shared/lib/system-colors';
 import { TransactionRow } from '@/widgets/transaction-row';
 
+import { toggleBalanceHidden, useIsBalanceHidden } from '../model/balance-visibility-store';
 import { useCurrencies, useHomeSummary } from '../model/use-home-summary';
 import { CategorySpendingDonut } from './category-spending-donut';
 import { CurrencySwitcher } from './currency-switcher';
@@ -40,8 +41,17 @@ function StatCard({
   );
 }
 
+const hiddenBalancePlaceholder = '••••';
+
 function goToFilteredFeed(type: 'expense' | 'income') {
   setFeedFilters({ ...defaultFeedFilters, type, period: 'month' });
+  router.push('/feed');
+}
+
+// A programmatic push does not fire the tab bar's `tabPress` reset (see app/(tabs)/_layout.tsx), so
+// the "All" link has to clear leftover filters itself to actually show all transactions.
+function goToUnfilteredFeed() {
+  resetFeedFilters();
   router.push('/feed');
 }
 
@@ -52,6 +62,7 @@ export function HomeScreen() {
   const [currency, setCurrency] = useState(currencies[0] ?? '');
   const selectedCurrency = currencies.includes(currency) ? currency : (currencies[0] ?? '');
   const summary = useHomeSummary(selectedCurrency);
+  const isBalanceHidden = useIsBalanceHidden();
 
   // A genuinely first run — no accounts yet — goes to onboarding instead of straight to an empty
   // Home. Gated on account count, not just the flag: an install that already has accounts (a
@@ -103,15 +114,25 @@ export function HomeScreen() {
           onPress={() => router.push('/balance-detail')}
           className="gap-3 rounded-3xl bg-[#007AFF] p-6 active:opacity-90"
         >
-          <Text className="text-sm text-white/70">{t('home.balance')}</Text>
+          <View className="flex-row items-center justify-between">
+            <Text className="text-sm text-white/70">{t('home.balance')}</Text>
+            <Pressable onPress={toggleBalanceHidden} hitSlop={12} className="active:opacity-70">
+              <Ionicons
+                name={isBalanceHidden ? 'eye-off-outline' : 'eye-outline'}
+                size={20}
+                color={systemColors.white}
+              />
+            </Pressable>
+          </View>
           <Text className="text-4xl font-bold text-white">
-            {formatCurrency(summary.totalBalance, selectedCurrency, i18n.language)}
+            {isBalanceHidden
+              ? hiddenBalancePlaceholder
+              : formatCurrency(summary.totalBalance, selectedCurrency, i18n.language)}
           </Text>
           <View className="flex-row items-center gap-1.5">
             <Ionicons name={monthNet >= 0 ? 'trending-up' : 'trending-down'} size={14} color={systemColors.white} />
             <Text className="text-sm text-white/80">
-              {t('home.netThisMonth')}: {monthNet >= 0 ? '+' : ''}
-              {formatCurrency(monthNet, selectedCurrency, i18n.language)}
+              {t('home.netThisMonth')}: {formatSignedCurrency(monthNet, selectedCurrency, i18n.language)}
             </Text>
           </View>
         </Pressable>
@@ -148,7 +169,7 @@ export function HomeScreen() {
           <View className="gap-2">
             <View className="flex-row items-center justify-between">
               <Text className="text-sm text-neutral-500 dark:text-neutral-400">{t('home.recentTitle')}</Text>
-              <Pressable onPress={() => router.push('/feed')} hitSlop={8}>
+              <Pressable onPress={goToUnfilteredFeed} hitSlop={8}>
                 <Text className="text-sm font-medium text-[#007AFF]">{t('home.recentAll')}</Text>
               </Pressable>
             </View>
