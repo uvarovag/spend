@@ -8,7 +8,7 @@ import { systemColors } from '@/shared/lib/system-colors';
 
 import { CategoryTile } from './category-tile';
 
-const tileWidthClassName = 'w-16';
+const tileWidthClassName = 'w-20';
 
 interface CategoryPickerProps {
   kind: CategoryKind;
