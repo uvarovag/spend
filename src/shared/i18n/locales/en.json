@@ -120,18 +120,17 @@
   },
   "onboarding": {
     "skip": "Skip",
-    "next": "Next",
     "step1": {
-      "title": "Welcome to Spend",
-      "accounts": "Accounts — track cash, cards, and savings separately",
-      "categories": "Categories — see where your money goes",
-      "transactions": "Log expenses, income, and transfers in seconds"
+      "title": "Add your first account",
+      "description": "An account is your wallet, card, or savings. Every expense, income, and transfer is tied to one, and its balance is always calculated from the transactions on it."
     },
     "step2": {
-      "title": "Add your first account"
+      "title": "Add an income category",
+      "description": "Income categories group where your money comes from — salary, freelance, gifts — so you can see it broken down later."
     },
     "step3": {
-      "title": "Add a category"
+      "title": "Add an expense category",
+      "description": "Expense categories group what you spend on — food, transport, subscriptions — so your spending breakdown makes sense from day one."
     }
   }
 }
